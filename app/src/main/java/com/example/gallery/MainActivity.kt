@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navAlbums -> show(1)
                 R.id.navSearch -> show(2)
-                R.id.navSettings -> show(3)
+                R.id.navAssistant -> show(3)
                 else -> show(0)
             }
             true
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val fragment: Fragment = when (index) {
             1 -> AlbumsFragment()
             2 -> SearchFragment()
-            3 -> SettingsFragment()
+            3 -> AssistantFragment()
             else -> PhotosFragment.newInstance(Filter())
         }
         supportFragmentManager.beginTransaction()

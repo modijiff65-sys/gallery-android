@@ -15,22 +15,24 @@ data class MediaItem(
     val sizeBytes: Long,
     val width: Int,
     val height: Int,
-    val mimeType: String
+    val mimeType: String,
+    val latitude: Double,
+    val longitude: Double
 ) : Serializable {
     val uri: Uri get() = Uri.parse(uriString)
+    val hasLocation: Boolean get() = latitude != 0.0 || longitude != 0.0
 }
 
 data class Album(
     val name: String,
     val count: Int,
-    val coverUriString: String
+    val covers: List<String>
 ) : Serializable
 
 data class QuickCard(
     val key: String,
     val title: String,
     val count: Int,
-    val coverUriString: String,
     val iconRes: Int
 ) : Serializable
 
@@ -39,6 +41,13 @@ data class SmartCategory(
     val title: String,
     val count: Int,
     val coverUriString: String,
+    val iconRes: Int
+) : Serializable
+
+data class Shortcut(
+    val key: String,
+    val title: String,
+    val count: Int,
     val iconRes: Int
 ) : Serializable
 

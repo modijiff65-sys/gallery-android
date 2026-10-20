@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="118dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="10dp"
-    android:background="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:layout_margin="5dp"
+    android:background="?attr/gCard"
+    android:orientation="vertical"
+    android:padding="14dp">
 
-    <FrameLayout
-        android:layout_width="118dp"
-        android:layout_height="118dp">
+    <ImageView
+        android:id="@+id/quickIcon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:src="@drawable/ic_heart"
+        app:tint="?attr/gOnSurface" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/quickCover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/gSurfaceAlt"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Card" />
-
-        <ImageView
-            android:id="@+id/quickIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_heart"
-            android:visibility="gone"
-            app:tint="#FFFFFF" />
-    </FrameLayout>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="14dp" />
 
     <TextView
         android:id="@+id/quickTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textColor="?attr/gOnSurface"
-        android:textSize="13sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/quickCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:textColor="?attr/gMuted"
-        android:textSize="11sp" />
+        android:textSize="12sp" />
 </LinearLayout>

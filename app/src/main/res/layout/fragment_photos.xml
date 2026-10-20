@@ -6,70 +6,17 @@
     android:background="?attr/gSurface"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/headerRow"
-        android:layout_width="match_parent"
+    <include layout="@layout/view_gallery_header" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:paddingStart="20dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="2dp">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="?attr/gOnSurface"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/gMuted"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/btnMulti"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Multi-select"
-            android:padding="10dp"
-            android:src="@drawable/ic_select_all"
-            app:tint="?attr/gOnSurface" />
-
-        <ImageView
-            android:id="@+id/btnSearch"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Search"
-            android:padding="10dp"
-            android:src="@drawable/ic_search"
-            app:tint="?attr/gOnSurface" />
-
-        <ImageView
-            android:id="@+id/btnSettings"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Settings"
-            android:padding="10dp"
-            android:src="@drawable/ic_settings"
-            app:tint="?attr/gOnSurface" />
-    </LinearLayout>
+        android:paddingEnd="20dp"
+        android:paddingBottom="2dp"
+        android:textColor="?attr/gMuted"
+        android:textSize="13sp" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"

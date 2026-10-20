@@ -1,4 +1,5 @@
 <resources>
+    <!-- DARK variant — matches the reference screens -->
     <style name="Theme.Gallery" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryVariant">@color/accentDark</item>
@@ -6,19 +7,20 @@
         <item name="colorSecondary">@color/accent</item>
         <item name="colorAccent">@color/accent</item>
 
-        <item name="android:colorBackground">#101115</item>
-        <item name="android:windowBackground">#101115</item>
-        <item name="android:statusBarColor">#101115</item>
-        <item name="android:navigationBarColor">#101115</item>
+        <item name="android:colorBackground">#0B0B0D</item>
+        <item name="android:windowBackground">#0B0B0D</item>
+        <item name="android:statusBarColor">#0B0B0D</item>
+        <item name="android:navigationBarColor">#0B0B0D</item>
         <item name="android:windowLightStatusBar">false</item>
 
-        <item name="gSurface">#17181D</item>
-        <item name="gSurfaceAlt">#1F2127</item>
-        <item name="gOnSurface">#ECEDF2</item>
-        <item name="gMuted">#9AA0AC</item>
-        <item name="gDivider">#2A2C34</item>
-        <item name="gChipBg">#23252C</item>
-        <item name="gChipOn">#FFFFFF</item>
-        <item name="gNavBg">#17181D</item>
+        <item name="gSurface">#0B0B0D</item>
+        <item name="gSurfaceAlt">#1B1B1E</item>
+        <item name="gCard">#1B1B1E</item>
+        <item name="gOnSurface">#FFFFFF</item>
+        <item name="gMuted">#9AA0A6</item>
+        <item name="gDivider">#242428</item>
+        <item name="gChipBg">#1B1B1E</item>
+        <item name="gNavBg">#0B0B0D</item>
+        <item name="gBar">#2A2A2C</item>
     </style>
 </resources>

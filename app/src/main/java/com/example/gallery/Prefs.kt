@@ -13,7 +13,7 @@ object Prefs {
 
     private fun sp(ctx: Context) = ctx.getSharedPreferences(FILE, Context.MODE_PRIVATE)
 
-    fun theme(ctx: Context): String = sp(ctx).getString("theme", THEME_SYSTEM) ?: THEME_SYSTEM
+    fun theme(ctx: Context): String = sp(ctx).getString("theme", THEME_DARK) ?: THEME_DARK
 
     fun setTheme(ctx: Context, value: String) {
         sp(ctx).edit().putString("theme", value).apply()

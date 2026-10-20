@@ -54,9 +54,8 @@ class PhotosFragment : Fragment() {
     private lateinit var lm: GridLayoutManager
     private lateinit var sticky: StickyHeaderDecoration
     private lateinit var chips: ChipGroup
-    private lateinit var title: TextView
+    private lateinit var pills: ChipGroup
     private lateinit var subtitle: TextView
-    private lateinit var headerRow: View
     private lateinit var selectionBar: View
     private lateinit var selCount: TextView
     private lateinit var selectionActions: View
@@ -76,6 +75,7 @@ class PhotosFragment : Fragment() {
     private var loadedOnce = false
     private var selectionMode = false
     private var startedByLongPress = false
+    private var syncingPills = false
 
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -102,10 +102,9 @@ class PhotosFragment : Fragment() {
         filter = arguments?.getSerializable(ARG_FILTER) as? Filter ?: Filter()
         repo = MediaRepository(requireContext())
 
-        title = view.findViewById(R.id.title)
         subtitle = view.findViewById(R.id.subtitle)
-        headerRow = view.findViewById(R.id.headerRow)
         chips = view.findViewById(R.id.chips)
+        pills = view.findViewById(R.id.hdrPills)
         selectionBar = view.findViewById(R.id.selectionBar)
         selCount = view.findViewById(R.id.selCount)
         selectionActions = view.findViewById(R.id.selectionActions)
@@ -152,15 +151,16 @@ class PhotosFragment : Fragment() {
         grid.addItemDecoration(sticky)
 
         setupChips()
+        setupPills()
         setupPinch()
 
-        view.findViewById<View>(R.id.btnSearch).setOnClickListener {
+        view.findViewById<View>(R.id.hdrSearch).setOnClickListener {
             (activity as? MainActivity)?.switchTab(R.id.navSearch)
         }
-        view.findViewById<View>(R.id.btnSettings).setOnClickListener {
-            (activity as? MainActivity)?.switchTab(R.id.navSettings)
+        view.findViewById<View>(R.id.hdrAvatar).setOnClickListener {
+            (activity as? MainActivity)?.switchTab(R.id.navAssistant)
         }
-        view.findViewById<View>(R.id.btnMulti).setOnClickListener {
+        view.findViewById<View>(R.id.hdrMulti).setOnClickListener {
             if (!selectionMode) {
                 selectionMode = true
                 startedByLongPress = false
@@ -253,6 +253,30 @@ class PhotosFragment : Fragment() {
                 else -> DateUtils.MODE_ALL
             }
             render()
+        }
+    }
+
+    private fun setupPills() {
+        val chipBg = MaterialColors.getColor(pills, R.attr.gChipBg)
+        val onSurface = MaterialColors.getColor(pills, R.attr.gOnSurface)
+        val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf())
+        val bgList = ColorStateList(states, intArrayOf(Color.parseColor("#5B6BE8"), chipBg))
+        val textList = ColorStateList(states, intArrayOf(Color.WHITE, onSurface))
+        for (i in 0 until pills.childCount) {
+            val c = pills.getChildAt(i) as? Chip ?: continue
+            c.chipBackgroundColor = bgList
+            c.setTextColor(textList)
+            c.chipStrokeWidth = 0f
+        }
+        syncingPills = true
+        pills.check(R.id.pillPhotos)
+        syncingPills = false
+        pills.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (syncingPills) return@setOnCheckedStateChangeListener
+            when (checkedIds.firstOrNull()) {
+                R.id.pillAlbums -> (activity as? MainActivity)?.switchTab(R.id.navAlbums)
+                R.id.pillCloud -> toast("Cloud backup jald aa raha hai")
+            }
         }
     }
 
@@ -386,17 +410,6 @@ class PhotosFragment : Fragment() {
     // ---------- render ----------
 
     private fun render() {
-        val titleText = when (filter.kind) {
-            Filter.KIND_ALBUM -> filter.value
-            Filter.KIND_CATEGORY -> filter.value.replaceFirstChar { it.uppercase() }
-            Filter.KIND_FAVOURITES -> getString(R.string.favourites)
-            Filter.KIND_RECENTS -> getString(R.string.recents)
-            Filter.KIND_TRASH -> getString(R.string.trash)
-            Filter.KIND_HIDDEN -> getString(R.string.hidden)
-            else -> getString(R.string.app_name)
-        }
-        title.text = titleText
-
         if (!hasPermission()) {
             grid.visibility = View.GONE
             loading.visibility = View.GONE
@@ -412,7 +425,17 @@ class PhotosFragment : Fragment() {
         }
 
         val list = visibleItems()
-        subtitle.text = plural(list.size, "item", "items")
+        val section = when (filter.kind) {
+            Filter.KIND_ALBUM -> filter.value
+            Filter.KIND_CATEGORY -> filter.value.replaceFirstChar { it.uppercase() }
+            Filter.KIND_FAVOURITES -> getString(R.string.favourites)
+            Filter.KIND_RECENTS -> getString(R.string.recents)
+            Filter.KIND_TRASH -> getString(R.string.trash)
+            Filter.KIND_HIDDEN -> getString(R.string.hidden)
+            else -> ""
+        }
+        subtitle.text = if (section.isEmpty()) plural(list.size, "item", "items")
+        else section + " · " + plural(list.size, "item", "items")
         adapter.submit(buildGridItems(list))
         loading.visibility = View.GONE
         val isEmpty = list.isEmpty()

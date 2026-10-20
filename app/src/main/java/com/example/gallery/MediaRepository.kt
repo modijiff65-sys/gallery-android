@@ -14,7 +14,6 @@ class MediaRepository(private val ctx: Context) {
         return out
     }
 
-    /** Trashed items — Android 11+ only. */
     fun loadTrashed(): List<MediaItem> {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) return emptyList()
         val out = ArrayList<MediaItem>()
@@ -26,7 +25,9 @@ class MediaRepository(private val ctx: Context) {
 
     fun albums(items: List<MediaItem>): List<Album> =
         items.groupBy { it.bucket }
-            .map { (name, list) -> Album(name, list.size, list.first().uriString) }
+            .map { (name, list) ->
+                Album(name, list.size, list.take(3).map { it.uriString })
+            }
             .sortedByDescending { it.count }
 
     fun categories(items: List<MediaItem>): List<SmartCategory> {
@@ -37,13 +38,27 @@ class MediaRepository(private val ctx: Context) {
         }
         val out = ArrayList<SmartCategory>()
         make("videos", "Videos", R.drawable.ic_videocam) { it.isVideo }?.let { out.add(it) }
-        make("screenshots", "Screenshots", R.drawable.ic_image) {
+        make("camera", "Camera", R.drawable.ic_camera) { it.bucket.contains("camera", true) }?.let { out.add(it) }
+        make("screenshots", "Screenshots", R.drawable.ic_screen) {
             it.bucket.contains("screenshot", true) || it.name.startsWith("Screenshot", true)
         }?.let { out.add(it) }
-        make("camera", "Camera", R.drawable.ic_camera) { it.bucket.contains("camera", true) }?.let { out.add(it) }
         make("downloads", "Downloads", R.drawable.ic_folder) { it.bucket.contains("download", true) }?.let { out.add(it) }
         make("gifs", "GIFs", R.drawable.ic_image) { it.name.endsWith(".gif", true) }?.let { out.add(it) }
         return out
+    }
+
+    fun shortcutCounts(items: List<MediaItem>): Map<String, Int> {
+        val favs = Prefs.favourites(ctx)
+        return mapOf(
+            "favourites" to items.count { favs.contains(it.uriString) },
+            "hidden" to Prefs.hidden(ctx).size,
+            "videos" to items.count { it.isVideo },
+            "screenshots" to items.count {
+                it.bucket.contains("screenshot", true) || it.name.startsWith("Screenshot", true)
+            },
+            "downloads" to items.count { it.bucket.contains("download", true) },
+            "camera" to items.count { it.bucket.contains("camera", true) }
+        )
     }
 
     private fun trashedSelection(): String? =
@@ -61,7 +76,9 @@ class MediaRepository(private val ctx: Context) {
             MediaStore.Images.Media.WIDTH,
             MediaStore.Images.Media.HEIGHT,
             MediaStore.Images.Media.MIME_TYPE,
-            MediaStore.Images.Media.RELATIVE_PATH
+            MediaStore.Images.Media.RELATIVE_PATH,
+            MediaStore.Images.Media.LATITUDE,
+            MediaStore.Images.Media.LONGITUDE
         )
         try {
             ctx.contentResolver.query(
@@ -78,30 +95,30 @@ class MediaRepository(private val ctx: Context) {
                 val hI = c.getColumnIndex(MediaStore.Images.Media.HEIGHT)
                 val mimeI = c.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)
                 val pathI = c.getColumnIndex(MediaStore.Images.Media.RELATIVE_PATH)
+                val latI = c.getColumnIndex(MediaStore.Images.Media.LATITUDE)
+                val lonI = c.getColumnIndex(MediaStore.Images.Media.LONGITUDE)
                 while (c.moveToNext()) {
                     val id = c.getLong(idI)
                     val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                     list.add(
                         MediaItem(
-                            id = id,
-                            uriString = uri.toString(),
+                            id = id, uriString = uri.toString(),
                             name = c.getString(nameI) ?: "Image",
                             dateMs = c.getLong(dateI) * 1000L,
                             bucket = c.getString(bucketI) ?: "Unknown",
                             relativePath = if (pathI >= 0) c.getString(pathI) ?: "" else "",
-                            isVideo = false,
-                            durationMs = 0L,
+                            isVideo = false, durationMs = 0L,
                             sizeBytes = c.getLong(sizeI),
                             width = if (wI >= 0) c.getInt(wI) else 0,
                             height = if (hI >= 0) c.getInt(hI) else 0,
-                            mimeType = if (mimeI >= 0) c.getString(mimeI) ?: "image/*" else "image/*"
+                            mimeType = if (mimeI >= 0) c.getString(mimeI) ?: "image/*" else "image/*",
+                            latitude = if (latI >= 0) c.getDouble(latI) else 0.0,
+                            longitude = if (lonI >= 0) c.getDouble(lonI) else 0.0
                         )
                     )
                 }
             }
-        } catch (e: Exception) {
-            // ignore
-        }
+        } catch (e: Exception) { }
         return list
     }
 
@@ -117,7 +134,9 @@ class MediaRepository(private val ctx: Context) {
             MediaStore.Video.Media.WIDTH,
             MediaStore.Video.Media.HEIGHT,
             MediaStore.Video.Media.MIME_TYPE,
-            MediaStore.Video.Media.RELATIVE_PATH
+            MediaStore.Video.Media.RELATIVE_PATH,
+            MediaStore.Video.Media.LATITUDE,
+            MediaStore.Video.Media.LONGITUDE
         )
         try {
             ctx.contentResolver.query(
@@ -135,30 +154,30 @@ class MediaRepository(private val ctx: Context) {
                 val hI = c.getColumnIndex(MediaStore.Video.Media.HEIGHT)
                 val mimeI = c.getColumnIndex(MediaStore.Video.Media.MIME_TYPE)
                 val pathI = c.getColumnIndex(MediaStore.Video.Media.RELATIVE_PATH)
+                val latI = c.getColumnIndex(MediaStore.Video.Media.LATITUDE)
+                val lonI = c.getColumnIndex(MediaStore.Video.Media.LONGITUDE)
                 while (c.moveToNext()) {
                     val id = c.getLong(idI)
                     val uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
                     list.add(
                         MediaItem(
-                            id = id,
-                            uriString = uri.toString(),
+                            id = id, uriString = uri.toString(),
                             name = c.getString(nameI) ?: "Video",
                             dateMs = c.getLong(dateI) * 1000L,
                             bucket = c.getString(bucketI) ?: "Unknown",
                             relativePath = if (pathI >= 0) c.getString(pathI) ?: "" else "",
-                            isVideo = true,
-                            durationMs = c.getLong(durI),
+                            isVideo = true, durationMs = c.getLong(durI),
                             sizeBytes = c.getLong(sizeI),
                             width = if (wI >= 0) c.getInt(wI) else 0,
                             height = if (hI >= 0) c.getInt(hI) else 0,
-                            mimeType = if (mimeI >= 0) c.getString(mimeI) ?: "video/*" else "video/*"
+                            mimeType = if (mimeI >= 0) c.getString(mimeI) ?: "video/*" else "video/*",
+                            latitude = if (latI >= 0) c.getDouble(latI) else 0.0,
+                            longitude = if (lonI >= 0) c.getDouble(lonI) else 0.0
                         )
                     )
                 }
             }
-        } catch (e: Exception) {
-            // ignore
-        }
+        } catch (e: Exception) { }
         return list
     }
 }

@@ -1,4 +1,5 @@
 <resources>
+    <!-- LIGHT variant -->
     <style name="Theme.Gallery" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryVariant">@color/accentDark</item>
@@ -13,15 +14,17 @@
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="gSurface">#FFFFFF</item>
-        <item name="gSurfaceAlt">#F4F5F9</item>
+        <item name="gSurfaceAlt">#F2F3F7</item>
+        <item name="gCard">#F4F5F9</item>
         <item name="gOnSurface">#14161C</item>
         <item name="gMuted">#6B7280</item>
-        <item name="gDivider">#E9EBF2</item>
-        <item name="gChipBg">#F2F3F8</item>
-        <item name="gChipOn">#FFFFFF</item>
+        <item name="gDivider">#E7E9F0</item>
+        <item name="gChipBg">#EEF0F6</item>
         <item name="gNavBg">#FFFFFF</item>
+        <item name="gBar">#F2F3F7</item>
     </style>
 
+    <!-- AMOLED pure black -->
     <style name="Theme.Gallery.Amoled" parent="Theme.Gallery">
         <item name="android:colorBackground">#000000</item>
         <item name="android:windowBackground">#000000</item>
@@ -30,13 +33,14 @@
         <item name="android:windowLightStatusBar">false</item>
 
         <item name="gSurface">#000000</item>
-        <item name="gSurfaceAlt">#0A0A0C</item>
-        <item name="gOnSurface">#EDEDF2</item>
-        <item name="gMuted">#8A90A0</item>
-        <item name="gDivider">#1A1B20</item>
-        <item name="gChipBg">#141519</item>
-        <item name="gChipOn">#FFFFFF</item>
+        <item name="gSurfaceAlt">#0E0E10</item>
+        <item name="gCard">#141416</item>
+        <item name="gOnSurface">#FFFFFF</item>
+        <item name="gMuted">#9AA0A6</item>
+        <item name="gDivider">#1F1F23</item>
+        <item name="gChipBg">#1B1B1E</item>
         <item name="gNavBg">#000000</item>
+        <item name="gBar">#1A1A1C</item>
     </style>
 
     <style name="Theme.Gallery.Viewer" parent="Theme.MaterialComponents.NoActionBar">
@@ -46,24 +50,31 @@
         <item name="android:statusBarColor">#000000</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="gSurface">#000000</item>
+        <item name="gSurfaceAlt">#141416</item>
+        <item name="gCard">#141416</item>
         <item name="gOnSurface">#FFFFFF</item>
-        <item name="gMuted">#B9BEC9</item>
+        <item name="gMuted">#9AA0A6</item>
+        <item name="gDivider">#2A2A2E</item>
+        <item name="gChipBg">#1B1B1E</item>
+        <item name="gBar">#2A2A2C</item>
     </style>
 
     <style name="ShapeAppearance.Gallery.Thumb" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
+        <item name="cornerSize">10dp</item>
     </style>
-
     <style name="ShapeAppearance.Gallery.Card" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">14dp</item>
+        <item name="cornerSize">18dp</item>
     </style>
-
+    <style name="ShapeAppearance.Gallery.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
     <style name="ShapeAppearance.Gallery.Sheet" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">22dp</item>
-        <item name="cornerSizeTopRight">22dp</item>
+        <item name="cornerSizeTopLeft">26dp</item>
+        <item name="cornerSizeTopRight">26dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
     </style>

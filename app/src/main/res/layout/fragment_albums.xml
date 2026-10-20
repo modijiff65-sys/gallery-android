@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/gSurface"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="8dp"
-        android:text="@string/nav_albums"
-        android:textColor="?attr/gOnSurface"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+    android:background="?attr/gSurface">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -28,58 +15,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="24dp">
+            android:paddingBottom="90dp">
 
-            <HorizontalScrollView
+            <include layout="@layout/view_gallery_header" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/quickGrid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/quickRow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="15dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="15dp"
+                android:scrollbars="none" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
-                android:paddingTop="20dp"
+                android:paddingTop="18dp"
                 android:paddingEnd="20dp"
-                android:paddingBottom="8dp"
-                android:text="@string/smart_categories"
+                android:paddingBottom="6dp"
+                android:text="@string/collections"
                 android:textColor="?attr/gOnSurface"
-                android:textSize="16sp"
+                android:textSize="19sp"
                 android:textStyle="bold" />
 
-            <HorizontalScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/categoryRow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:scrollbars="none" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
-                android:paddingTop="20dp"
+                android:paddingTop="18dp"
                 android:paddingEnd="20dp"
-                android:paddingBottom="4dp"
-                android:text="@string/folders"
+                android:paddingBottom="6dp"
+                android:text="@string/my_albums"
                 android:textColor="?attr/gOnSurface"
-                android:textSize="16sp"
+                android:textSize="19sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -87,9 +67,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:scrollbars="none" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:contentDescription="New album"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/accent"
+        app:fabSize="normal"
+        app:tint="@color/white" />
+</FrameLayout>

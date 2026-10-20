@@ -19,10 +19,37 @@
             android:paddingTop="14dp"
             android:paddingEnd="20dp"
             android:paddingBottom="6dp"
-            android:text="@string/nav_settings"
+            android:text="@string/nav_assistant"
             android:textColor="?attr/gOnSurface"
-            android:textSize="26sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="4dp"
+            android:text="@string/shortcuts"
+            android:textColor="@color/accentLight"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shortcuts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="?attr/gDivider" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +59,7 @@
             android:paddingEnd="20dp"
             android:paddingBottom="6dp"
             android:text="@string/settings_theme"
-            android:textColor="@color/accent"
+            android:textColor="@color/accentLight"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -100,7 +127,7 @@
             android:paddingEnd="20dp"
             android:paddingBottom="4dp"
             android:text="@string/settings_grid"
-            android:textColor="@color/accent"
+            android:textColor="@color/accentLight"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -159,7 +186,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="18dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -213,7 +240,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="18dp"
                 android:layout_weight="1"
                 android:text="@string/settings_about"
                 android:textColor="?attr/gOnSurface"

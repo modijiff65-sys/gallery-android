@@ -1,52 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="156dp"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:background="?attr/selectableItemBackground"
-    android:gravity="center"
+    android:layout_marginEnd="10dp"
+    android:background="?attr/gCard"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="12dp">
 
-    <FrameLayout
-        android:layout_width="66dp"
-        android:layout_height="66dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/catCover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/gSurfaceAlt"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Card" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/catIcon"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_gravity="center"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_videocam"
-            android:visibility="gone"
-            app:tint="#FFFFFF" />
-    </FrameLayout>
+            app:tint="?attr/gOnSurface" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/catCover"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="?attr/gSurfaceAlt"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Thumb" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/catTitle"
-        android:layout_width="76dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:ellipsize="end"
-        android:gravity="center"
         android:maxLines="1"
         android:textColor="?attr/gOnSurface"
-        android:textSize="12sp" />
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/catCount"
-        android:layout_width="76dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginTop="1dp"
         android:textColor="?attr/gMuted"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 </LinearLayout>

@@ -20,7 +20,6 @@ class QuickAdapter(private val onClick: (QuickCard) -> Unit) :
     }
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
-        val cover: ShapeableImageView = v.findViewById(R.id.quickCover)
         val icon: ImageView = v.findViewById(R.id.quickIcon)
         val title: TextView = v.findViewById(R.id.quickTitle)
         val count: TextView = v.findViewById(R.id.quickCount)
@@ -34,20 +33,9 @@ class QuickAdapter(private val onClick: (QuickCard) -> Unit) :
     override fun onBindViewHolder(holder: VH, position: Int) {
         val q = items[position]
         holder.title.text = q.title
-        holder.count.text = "${q.count} items"
-        if (q.coverUriString.isNotEmpty()) {
-            Glide.with(holder.cover).load(Uri.parse(q.coverUriString)).centerCrop().into(holder.cover)
-        } else {
-            holder.cover.setImageDrawable(null)
-        }
+        holder.count.text = "${q.count} photos"
         holder.icon.setImageResource(q.iconRes)
-        holder.icon.visibility = View.VISIBLE
         holder.itemView.setOnClickListener { onClick(q) }
-    }
-
-    override fun onViewRecycled(holder: VH) {
-        Glide.with(holder.cover).clear(holder.cover)
-        super.onViewRecycled(holder)
     }
 }
 
@@ -75,15 +63,43 @@ class CategoryAdapter(private val onClick: (SmartCategory) -> Unit) :
     override fun onBindViewHolder(holder: VH, position: Int) {
         val c = items[position]
         holder.title.text = c.title
-        holder.count.text = "${c.count}"
-        Glide.with(holder.cover).load(Uri.parse(c.coverUriString)).centerCrop().into(holder.cover)
+        holder.count.text = "${c.count} photos"
         holder.icon.setImageResource(c.iconRes)
-        holder.icon.visibility = View.VISIBLE
+        Glide.with(holder.cover).load(Uri.parse(c.coverUriString)).centerCrop().into(holder.cover)
         holder.itemView.setOnClickListener { onClick(c) }
     }
 
     override fun onViewRecycled(holder: VH) {
         Glide.with(holder.cover).clear(holder.cover)
         super.onViewRecycled(holder)
+    }
+}
+
+class ShortcutAdapter(private val onClick: (Shortcut) -> Unit) :
+    RecyclerView.Adapter<ShortcutAdapter.VH>() {
+
+    private val items = ArrayList<Shortcut>()
+
+    fun submit(list: List<Shortcut>) {
+        items.clear(); items.addAll(list); notifyDataSetChanged()
+    }
+
+    class VH(v: View) : RecyclerView.ViewHolder(v) {
+        val icon: ImageView = v.findViewById(R.id.shortcutIcon)
+        val title: TextView = v.findViewById(R.id.shortcutTitle)
+        val count: TextView = v.findViewById(R.id.shortcutCount)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
+        VH(LayoutInflater.from(parent.context).inflate(R.layout.item_shortcut, parent, false))
+
+    override fun getItemCount(): Int = items.size
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val s = items[position]
+        holder.title.text = s.title
+        holder.count.text = "${s.count}"
+        holder.icon.setImageResource(s.iconRes)
+        holder.itemView.setOnClickListener { onClick(s) }
     }
 }

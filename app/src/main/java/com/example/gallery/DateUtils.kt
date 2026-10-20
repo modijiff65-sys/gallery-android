@@ -48,6 +48,9 @@ object DateUtils {
         }
     }
 
+    fun takenLabel(ms: Long): String =
+        SimpleDateFormat("EEEE, MMM d, yyyy 'at' h:mm a", Locale.getDefault()).format(Date(ms))
+
     fun fullStamp(ms: Long): String =
         SimpleDateFormat("d MMM yyyy · h:mm a", Locale.getDefault()).format(Date(ms))
 
