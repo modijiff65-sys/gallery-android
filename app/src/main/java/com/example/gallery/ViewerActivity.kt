@@ -1,13 +1,17 @@
 package com.example.gallery
 
+import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.GestureDetector
+import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
@@ -16,7 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlin.math.abs
 
 class ViewerActivity : AppCompatActivity() {
 
@@ -34,13 +40,16 @@ class ViewerActivity : AppCompatActivity() {
 
     private val items = ArrayList<MediaItem>()
     private var index = 0
+    private var barsVisible = true
 
     private lateinit var pager: ViewPager2
     private lateinit var adapter: ViewerAdapter
     private lateinit var stripAdapter: StripAdapter
+    private lateinit var topBar: View
+    private lateinit var bottomBar: View
     private lateinit var vTitle: TextView
     private lateinit var vDate: TextView
-    private lateinit var favIcon: ImageView
+    private lateinit var favTop: ImageView
 
     private val deleteLauncher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
@@ -62,9 +71,11 @@ class ViewerActivity : AppCompatActivity() {
         index = intent.getIntExtra(EXTRA_INDEX, 0).coerceIn(0, items.size - 1)
 
         pager = findViewById(R.id.pager)
+        topBar = findViewById(R.id.viewerTop)
+        bottomBar = findViewById(R.id.viewerBottom)
         vTitle = findViewById(R.id.vTitle)
         vDate = findViewById(R.id.vDate)
-        favIcon = findViewById(R.id.actFavIcon)
+        favTop = findViewById(R.id.btnFavTop)
 
         val strip = findViewById<RecyclerView>(R.id.strip)
         strip.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -85,13 +96,37 @@ class ViewerActivity : AppCompatActivity() {
             }
         })
 
+        val gd = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                toggleBars()
+                return true
+            }
+
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
+                if (e1 != null) {
+                    val dy = e2.y - e1.y
+                    val dx = e2.x - e1.x
+                    if (dy > 150 && abs(dy) > abs(dx)) {
+                        finish()
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+        pager.setOnTouchListener { _, e ->
+            gd.onTouchEvent(e)
+            false
+        }
+
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
-        findViewById<View>(R.id.btnMore).setOnClickListener { showInfo() }
-        findViewById<View>(R.id.btnShareTop).setOnClickListener { share() }
+        findViewById<View>(R.id.btnFavTop).setOnClickListener { toggleFav() }
+        findViewById<View>(R.id.btnInfoTop).setOnClickListener { showInfo() }
+        findViewById<View>(R.id.btnMore).setOnClickListener { showTools() }
         findViewById<View>(R.id.actShare).setOnClickListener { share() }
-        findViewById<View>(R.id.actFav).setOnClickListener { toggleFav() }
-        findViewById<View>(R.id.actDelete).setOnClickListener { confirmDelete() }
-        findViewById<View>(R.id.actInfo).setOnClickListener { showInfo() }
+        findViewById<View>(R.id.actEdit).setOnClickListener { edit() }
+        findViewById<View>(R.id.actDelete).setOnClickListener { confirmTrash() }
+        findViewById<View>(R.id.actTools).setOnClickListener { showTools() }
 
         updateHeader()
     }
@@ -108,11 +143,28 @@ class ViewerActivity : AppCompatActivity() {
 
     private fun current(): MediaItem? = items.getOrNull(index)
 
+    private fun toggleBars() {
+        barsVisible = !barsVisible
+        val target = if (barsVisible) 1f else 0f
+        topBar.animate().alpha(target).setDuration(160).start()
+        bottomBar.animate().alpha(target).setDuration(160).start()
+        topBar.visibility = View.VISIBLE
+        bottomBar.visibility = View.VISIBLE
+        if (!barsVisible) {
+            topBar.postDelayed({
+                if (!barsVisible) {
+                    topBar.visibility = View.GONE
+                    bottomBar.visibility = View.GONE
+                }
+            }, 180)
+        }
+    }
+
     private fun updateHeader() {
         val item = current() ?: return
         vTitle.text = item.name
         vDate.text = DateUtils.fullStamp(item.dateMs)
-        favIcon.alpha = if (Favs.contains(this, item.uriString)) 1f else 0.45f
+        favTop.alpha = if (Prefs.favourites(this).contains(item.uriString)) 1f else 0.5f
     }
 
     private fun share() {
@@ -129,34 +181,49 @@ class ViewerActivity : AppCompatActivity() {
         }
     }
 
+    private fun edit() {
+        val item = current() ?: return
+        if (item.isVideo) {
+            toast("Video editing abhi support nahi hai")
+            return
+        }
+        EditorActivity.start(this, item)
+    }
+
     private fun toggleFav() {
         val item = current() ?: return
-        val added = Favs.toggle(this, item.uriString)
-        favIcon.alpha = if (added) 1f else 0.45f
+        val favs = Prefs.favourites(this)
+        val added = if (favs.contains(item.uriString)) {
+            favs.remove(item.uriString); false
+        } else {
+            favs.add(item.uriString); true
+        }
+        Prefs.setFavourites(this, favs)
+        favTop.alpha = if (added) 1f else 0.5f
         toast(if (added) "Favourites mein add hua" else "Favourites se hata")
     }
 
-    private fun confirmDelete() {
+    private fun confirmTrash() {
         val item = current() ?: return
         MaterialAlertDialogBuilder(this)
-            .setTitle("Delete")
-            .setMessage("Ye ${if (item.isVideo) "video" else "photo"} delete karni hai?")
-            .setPositiveButton("Delete") { _, _ -> doDelete(item) }
+            .setTitle("Move to trash")
+            .setMessage("Ye ${if (item.isVideo) "video" else "photo"} trash mein bhejni hai?")
+            .setPositiveButton("Trash") { _, _ -> doTrash(item) }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun doDelete(item: MediaItem) {
+    private fun doTrash(item: MediaItem) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val pi = MediaStore.createDeleteRequest(contentResolver, listOf(item.uri))
+                val pi = MediaStore.createTrashRequest(contentResolver, listOf(item.uri), true)
                 deleteLauncher.launch(IntentSenderRequest.Builder(pi.intentSender).build())
             } else {
                 val n = contentResolver.delete(item.uri, null, null)
                 if (n > 0) deleteCurrent()
             }
         } catch (e: Exception) {
-            toast("Delete nahi ho paya")
+            toast("Trash nahi ho paya")
         }
     }
 
@@ -173,30 +240,88 @@ class ViewerActivity : AppCompatActivity() {
         pager.setCurrentItem(index, false)
         stripAdapter.submit(items, index)
         updateHeader()
-        toast("Delete ho gaya")
+        toast("Trash mein bhej diya")
+    }
+
+    private fun showTools() {
+        val item = current() ?: return
+        val hidden = Prefs.hidden(this).contains(item.uriString)
+        val options = ArrayList<String>()
+        options.add("Set as wallpaper")
+        options.add(if (hidden) "Unhide" else "Hide")
+        options.add("Favourite")
+        options.add("Share")
+        options.add("Details")
+        MaterialAlertDialogBuilder(this)
+            .setTitle(item.name)
+            .setItems(options.toTypedArray()) { _, which ->
+                when (which) {
+                    0 -> setWallpaper(item)
+                    1 -> toggleHidden(item)
+                    2 -> toggleFav()
+                    3 -> share()
+                    4 -> showInfo()
+                }
+            }
+            .show()
+    }
+
+    private fun toggleHidden(item: MediaItem) {
+        val hidden = Prefs.hidden(this)
+        val nowHidden = if (hidden.contains(item.uriString)) {
+            hidden.remove(item.uriString); false
+        } else {
+            hidden.add(item.uriString); true
+        }
+        Prefs.setHidden(this, hidden)
+        toast(if (nowHidden) "Hidden folder mein bhej diya" else "Hidden folder se hata diya")
+    }
+
+    private fun setWallpaper(item: MediaItem) {
+        if (item.isVideo) {
+            toast("Video wallpaper nahi ban sakta")
+            return
+        }
+        try {
+            contentResolver.openInputStream(item.uri)?.use { ins ->
+                val wm = WallpaperManager.getInstance(this)
+                wm.setStream(ins, null, true, WallpaperManager.FLAG_SYSTEM)
+                toast("Wallpaper set ho gaya")
+            }
+        } catch (e: Exception) {
+            toast("Wallpaper set nahi ho paya")
+        }
     }
 
     private fun showInfo() {
         val item = current() ?: return
-        val sb = StringBuilder()
-        sb.append("Name: ").append(item.name).append("\n")
-        sb.append("Album: ").append(item.bucket).append("\n")
-        sb.append("Date: ").append(DateUtils.fullStamp(item.dateMs)).append("\n")
-        sb.append("Size: ").append(DateUtils.size(item.sizeBytes)).append("\n")
+        val sheet = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.sheet_info, null)
+        sheet.setContentView(view)
+        val host = view.findViewById<LinearLayout>(R.id.infoRows)
+        val (day, time) = DateUtils.dayAndTime(item.dateMs)
+
+        val rows = ArrayList<Pair<String, String>>()
+        rows.add("Name" to item.name)
+        rows.add("Album" to item.bucket)
+        rows.add("Date" to day)
+        rows.add("Time" to time)
+        rows.add("Size" to DateUtils.size(item.sizeBytes))
         if (item.width > 0 && item.height > 0) {
-            sb.append("Dimensions: ").append(item.width).append(" × ").append(item.height).append("\n")
+            rows.add("Resolution" to "${item.width} × ${item.height} • ${DateUtils.megapixels(item.width, item.height)}")
         }
-        if (item.isVideo) {
-            sb.append("Duration: ").append(DateUtils.duration(item.durationMs)).append("\n")
-            sb.append("Type: Video")
-        } else {
-            sb.append("Type: Image")
+        rows.add("Format" to item.mimeType)
+        if (item.isVideo) rows.add("Duration" to DateUtils.duration(item.durationMs))
+        if (item.relativePath.isNotEmpty()) rows.add("Path" to item.relativePath)
+        rows.addAll(ExifUtils.read(this, item.uri))
+
+        for ((label, value) in rows) {
+            val row = layoutInflater.inflate(R.layout.item_info_row, host, false)
+            row.findViewById<TextView>(R.id.infoLabel).text = label
+            row.findViewById<TextView>(R.id.infoValue).text = value
+            host.addView(row)
         }
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Details")
-            .setMessage(sb.toString())
-            .setPositiveButton("OK", null)
-            .show()
+        sheet.show()
     }
 
     private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()

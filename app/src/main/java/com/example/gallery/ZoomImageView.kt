@@ -11,7 +11,6 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import androidx.appcompat.widget.AppCompatImageView
 
-/** ImageView with pinch-to-zoom and double-tap-to-zoom. */
 class ZoomImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -46,7 +45,6 @@ class ZoomImageView @JvmOverloads constructor(
         context,
         object : GestureDetector.SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent): Boolean = true
-
             override fun onDoubleTap(e: MotionEvent): Boolean {
                 if (currentScale > 1.05f) resetZoom() else zoomTo(2.6f, e.x, e.y)
                 return true
@@ -108,15 +106,13 @@ class ZoomImageView @JvmOverloads constructor(
         val vh = height.toFloat()
         var dx = 0f
         var dy = 0f
-        if (rect.width() <= vw) {
-            dx = (vw - rect.width()) / 2f - rect.left
-        } else {
+        if (rect.width() <= vw) dx = (vw - rect.width()) / 2f - rect.left
+        else {
             if (rect.left > 0f) dx = -rect.left
             if (rect.right < vw) dx = vw - rect.right
         }
-        if (rect.height() <= vh) {
-            dy = (vh - rect.height()) / 2f - rect.top
-        } else {
+        if (rect.height() <= vh) dy = (vh - rect.height()) / 2f - rect.top
+        else {
             if (rect.top > 0f) dy = -rect.top
             if (rect.bottom < vh) dy = vh - rect.bottom
         }
@@ -127,12 +123,9 @@ class ZoomImageView @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(event)
         gestureDetector.onTouchEvent(event)
-
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                lastX = event.x
-                lastY = event.y
-                dragging = true
+                lastX = event.x; lastY = event.y; dragging = true
             }
             MotionEvent.ACTION_MOVE -> {
                 if (dragging && currentScale > 1.01f && !scaleDetector.isInProgress &&
@@ -142,12 +135,10 @@ class ZoomImageView @JvmOverloads constructor(
                     clamp()
                     imageMatrix = drawMatrix
                 }
-                lastX = event.x
-                lastY = event.y
+                lastX = event.x; lastY = event.y
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> dragging = false
         }
-
         parent?.requestDisallowInterceptTouchEvent(
             currentScale > 1.01f || scaleDetector.isInProgress
         )

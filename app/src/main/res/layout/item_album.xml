@@ -15,9 +15,9 @@
             android:id="@+id/cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/chipBg"
+            android:background="?attr/gSurfaceAlt"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Thumb" />
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Card" />
     </com.example.gallery.SquareLayout>
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/ink"
+        android:textColor="?attr/gOnSurface"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -35,7 +35,6 @@
         android:id="@+id/albumCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:textColor="@color/muted"
+        android:textColor="?attr/gMuted"
         android:textSize="12sp" />
 </LinearLayout>

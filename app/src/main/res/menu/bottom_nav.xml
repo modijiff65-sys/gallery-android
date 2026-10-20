@@ -2,5 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/navPhotos" android:icon="@drawable/ic_grid" android:title="@string/nav_photos" />
     <item android:id="@+id/navAlbums" android:icon="@drawable/ic_album" android:title="@string/nav_albums" />
-    <item android:id="@+id/navFavs" android:icon="@drawable/ic_heart" android:title="@string/nav_favs" />
+    <item android:id="@+id/navSearch" android:icon="@drawable/ic_search" android:title="@string/nav_search" />
+    <item android:id="@+id/navSettings" android:icon="@drawable/ic_settings" android:title="@string/nav_settings" />
 </menu>

@@ -15,9 +15,7 @@ class AlbumAdapter(private val onClick: (Album) -> Unit) :
     private val items = ArrayList<Album>()
 
     fun submit(list: List<Album>) {
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
+        items.clear(); items.addAll(list); notifyDataSetChanged()
     }
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
@@ -26,22 +24,17 @@ class AlbumAdapter(private val onClick: (Album) -> Unit) :
         val count: TextView = v.findViewById(R.id.albumCount)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_album, parent, false)
-        return VH(v)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
+        VH(LayoutInflater.from(parent.context).inflate(R.layout.item_album, parent, false))
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val album = items[position]
-        holder.name.text = album.name
-        holder.count.text = "${album.count} items"
-        Glide.with(holder.cover)
-            .load(Uri.parse(album.coverUriString))
-            .centerCrop()
-            .into(holder.cover)
-        holder.itemView.setOnClickListener { onClick(album) }
+        val a = items[position]
+        holder.name.text = a.name
+        holder.count.text = "${a.count} items"
+        Glide.with(holder.cover).load(Uri.parse(a.coverUriString)).centerCrop().into(holder.cover)
+        holder.itemView.setOnClickListener { onClick(a) }
     }
 
     override fun onViewRecycled(holder: VH) {

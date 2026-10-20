@@ -32,11 +32,9 @@ class MediaGridAdapter(
         notifyDataSetChanged()
     }
 
-    fun mediaItems(): List<MediaItem> =
-        items.filterIsInstance<GridItem.Media>().map { it.item }
+    fun mediaItems(): List<MediaItem> = items.filterIsInstance<GridItem.Media>().map { it.item }
 
-    fun selectedItems(): List<MediaItem> =
-        mediaItems().filter { selected.contains(it.uriString) }
+    fun selectedItems(): List<MediaItem> = mediaItems().filter { selected.contains(it.uriString) }
 
     fun selectedCount(): Int = selected.size
 
@@ -55,11 +53,22 @@ class MediaGridAdapter(
     fun toggleSelection(item: MediaItem) {
         if (selected.contains(item.uriString)) selected.remove(item.uriString)
         else selected.add(item.uriString)
-        val pos = items.indexOfFirst {
-            it is GridItem.Media && it.item.uriString == item.uriString
-        }
+        val pos = items.indexOfFirst { it is GridItem.Media && it.item.uriString == item.uriString }
         if (pos >= 0) notifyItemChanged(pos)
     }
+
+    /** Nearest header at or above [position], or -1. */
+    fun headerPositionFor(position: Int): Int {
+        var p = position
+        while (p >= 0) {
+            if (items.getOrNull(p) is GridItem.Header) return p
+            p--
+        }
+        return -1
+    }
+
+    fun headerTitleAt(position: Int): String? =
+        (items.getOrNull(position) as? GridItem.Header)?.title
 
     override fun getItemViewType(position: Int): Int =
         if (items[position] is GridItem.Header) TYPE_HEADER else TYPE_MEDIA
@@ -90,14 +99,12 @@ class MediaGridAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val gi = items[position]) {
             is GridItem.Header -> (holder as HeaderVH).title.text = gi.title
-
             is GridItem.Media -> {
                 val h = holder as MediaVH
                 val item = gi.item
-
                 Glide.with(h.thumb)
                     .load(item.uri)
-                    .override(420, 420)
+                    .override(480, 480)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(h.thumb)
@@ -106,9 +113,7 @@ class MediaGridAdapter(
                 if (item.isVideo && item.durationMs > 0) {
                     h.duration.visibility = View.VISIBLE
                     h.duration.text = DateUtils.duration(item.durationMs)
-                } else {
-                    h.duration.visibility = View.GONE
-                }
+                } else h.duration.visibility = View.GONE
 
                 val isSel = selected.contains(item.uriString)
                 h.scrim.visibility = if (isSel) View.VISIBLE else View.GONE
@@ -126,9 +131,7 @@ class MediaGridAdapter(
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-        if (holder is MediaVH) {
-            Glide.with(holder.thumb).clear(holder.thumb)
-        }
+        if (holder is MediaVH) Glide.with(holder.thumb).clear(holder.thumb)
         super.onViewRecycled(holder)
     }
 }

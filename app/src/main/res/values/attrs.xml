@@ -1,0 +1,10 @@
+<resources>
+    <attr name="gSurface" format="color" />
+    <attr name="gSurfaceAlt" format="color" />
+    <attr name="gOnSurface" format="color" />
+    <attr name="gMuted" format="color" />
+    <attr name="gDivider" format="color" />
+    <attr name="gChipBg" format="color" />
+    <attr name="gChipOn" format="color" />
+    <attr name="gNavBg" format="color" />
+</resources>

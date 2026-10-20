@@ -99,9 +99,7 @@ class ViewerAdapter(private val items: List<MediaItem>) :
                         curTime.text = DateUtils.duration(p.toLong())
                     }
                 }
-
                 override fun onStartTrackingTouch(sb: SeekBar) {}
-
                 override fun onStopTrackingTouch(sb: SeekBar) {}
             })
         }
@@ -123,11 +121,7 @@ class ViewerAdapter(private val items: List<MediaItem>) :
         }
 
         fun pause() {
-            try {
-                if (video.isPlaying) video.pause()
-            } catch (e: Exception) {
-                // ignore
-            }
+            try { if (video.isPlaying) video.pause() } catch (e: Exception) {}
             bigPlay.setImageResource(R.drawable.ic_play_circle)
             bigPlay.visibility = View.VISIBLE
             controls.visibility = View.VISIBLE
@@ -138,21 +132,16 @@ class ViewerAdapter(private val items: List<MediaItem>) :
         fun stopAll() {
             handler.removeCallbacks(ticker)
             handler.removeCallbacks(hideControls)
-            try {
-                if (video.isPlaying) video.pause()
-            } catch (e: Exception) {
-                // ignore
-            }
+            try { if (video.isPlaying) video.pause() } catch (e: Exception) {}
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inf = LayoutInflater.from(parent.context)
-        return if (viewType == TYPE_VIDEO) {
+        return if (viewType == TYPE_VIDEO)
             VideoVH(inf.inflate(R.layout.item_viewer_video, parent, false))
-        } else {
+        else
             ImageVH(inf.inflate(R.layout.item_viewer_image, parent, false))
-        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -188,9 +177,7 @@ class ViewerAdapter(private val items: List<MediaItem>) :
         }
     }
 
-    fun pauseActive() {
-        activeVideo?.pause()
-    }
+    fun pauseActive() { activeVideo?.pause() }
 
     fun release() {
         activeVideo?.stopAll()

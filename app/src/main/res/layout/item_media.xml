@@ -10,7 +10,7 @@
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/chipBg"
+        android:background="?attr/gSurfaceAlt"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Thumb" />
 
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/playBadge"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_gravity="bottom|start"
         android:layout_margin="6dp"
         android:src="@drawable/ic_play"

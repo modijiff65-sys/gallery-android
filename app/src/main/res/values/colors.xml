@@ -2,11 +2,8 @@
     <color name="accent">#6D5EFC</color>
     <color name="accentDark">#4B3FD6</color>
     <color name="accentSoft">#EFECFF</color>
-    <color name="ink">#14161C</color>
-    <color name="ink2">#3A3F4B</color>
-    <color name="muted">#6B7280</color>
-    <color name="line">#E9EBF2</color>
-    <color name="chipBg">#F2F3F8</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="scrim">#66000000</color>
+    <color name="sheetScrim">#99000000</color>
 </resources>

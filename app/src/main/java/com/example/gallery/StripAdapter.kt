@@ -14,10 +14,7 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
     private var selected = 0
 
     fun submit(list: List<MediaItem>, sel: Int) {
-        items.clear()
-        items.addAll(list)
-        selected = sel
-        notifyDataSetChanged()
+        items.clear(); items.addAll(list); selected = sel; notifyDataSetChanged()
     }
 
     fun setSelected(i: Int) {
@@ -32,16 +29,13 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
         val border: View = v.findViewById(R.id.stripBorder)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_strip, parent, false)
-        return VH(v)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
+        VH(LayoutInflater.from(parent.context).inflate(R.layout.item_strip, parent, false))
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val item = items[position]
-        Glide.with(holder.img).load(item.uri).centerCrop().into(holder.img)
+        Glide.with(holder.img).load(items[position].uri).centerCrop().into(holder.img)
         val isSel = position == selected
         holder.img.alpha = if (isSel) 1f else 0.6f
         holder.border.visibility = if (isSel) View.VISIBLE else View.GONE

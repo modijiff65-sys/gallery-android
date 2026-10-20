@@ -1,18 +1,21 @@
 <resources>
     <string name="app_name">Gallery</string>
-    <string name="tab_photos">Photos</string>
-    <string name="tab_albums">Albums</string>
-    <string name="tab_favs">Favourites</string>
     <string name="nav_photos">Photos</string>
     <string name="nav_albums">Albums</string>
-    <string name="nav_favs">Favourites</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_settings">Settings</string>
+    <string name="chip_all">All Photos</string>
+    <string name="chip_years">Years</string>
+    <string name="chip_months">Months</string>
+    <string name="chip_days">Days</string>
     <string name="search_hint">Photos, videos ya album search karein</string>
-    <string name="cancel">Cancel</string>
     <string name="select_all">Select all</string>
     <string name="share">Share</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="info">Info</string>
     <string name="favourite">Favourite</string>
+    <string name="more">More</string>
     <string name="empty_title">No photos yet</string>
     <string name="empty_sub">Aapke device par koi photo ya video nahi mila.</string>
     <string name="no_results_title">Kuch nahi mila</string>
@@ -22,4 +25,18 @@
     <string name="grant">Permission dein</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="favourites">Favourites</string>
+    <string name="recents">Recents</string>
+    <string name="trash">Trash</string>
+    <string name="hidden">Hidden</string>
+    <string name="smart_categories">Categories</string>
+    <string name="folders">Folders</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_grid">Default grid size</string>
+    <string name="settings_hidden">Hidden folder</string>
+    <string name="settings_about">About</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_amoled">AMOLED black</string>
 </resources>

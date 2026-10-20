@@ -38,9 +38,9 @@
             android:id="@+id/curTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="0:00"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:text="0:00" />
+            android:textSize="12sp" />
 
         <SeekBar
             android:id="@+id/seek"
@@ -54,8 +54,8 @@
             android:id="@+id/totalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="0:00"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:text="0:00" />
+            android:textSize="12sp" />
     </LinearLayout>
 </FrameLayout>
