@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Gallery</string>
+    <string name="tab_photos">Photos</string>
+    <string name="tab_albums">Albums</string>
+    <string name="tab_favs">Favourites</string>
+    <string name="nav_photos">Photos</string>
+    <string name="nav_albums">Albums</string>
+    <string name="nav_favs">Favourites</string>
+    <string name="empty_title">No photos yet</string>
+    <string name="empty_sub">Aapke device par koi photo ya video nahi mila.</string>
+</resources>

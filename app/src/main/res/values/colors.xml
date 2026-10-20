@@ -1,0 +1,8 @@
+<resources>
+    <color name="accent">#6D5EFC</color>
+    <color name="accentDark">#4B3FD6</color>
+    <color name="ink">#14161C</color>
+    <color name="muted">#6B7280</color>
+    <color name="line">#ECEEF3</color>
+    <color name="white">#FFFFFF</color>
+</resources>
