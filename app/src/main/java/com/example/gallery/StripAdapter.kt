@@ -1,7 +1,5 @@
 package com.example.gallery
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +29,7 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
         val img: ShapeableImageView = v.findViewById(R.id.stripThumb)
+        val border: View = v.findViewById(R.id.stripBorder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -45,8 +44,7 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
         Glide.with(holder.img).load(item.uri).centerCrop().into(holder.img)
         val isSel = position == selected
         holder.img.alpha = if (isSel) 1f else 0.6f
-        holder.img.strokeWidth = if (isSel) dp(holder.img, 2) else 0
-        holder.img.strokeColor = ColorStateList.valueOf(Color.WHITE)
+        holder.border.visibility = if (isSel) View.VISIBLE else View.GONE
         holder.itemView.setOnClickListener { onClick(position) }
     }
 
@@ -54,7 +52,4 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
         Glide.with(holder.img).clear(holder.img)
         super.onViewRecycled(holder)
     }
-
-    private fun dp(v: View, value: Int): Int =
-        (value * v.resources.displayMetrics.density).toInt()
 }
