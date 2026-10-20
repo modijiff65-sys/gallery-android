@@ -14,6 +14,13 @@ class MediaRepository(private val ctx: Context) {
         return out
     }
 
+    fun albums(items: List<MediaItem>): List<Album> =
+        items.groupBy { it.bucket }
+            .map { (name, list) ->
+                Album(name, list.size, list.first().uriString, list.first().isVideo)
+            }
+            .sortedByDescending { it.count }
+
     private fun queryImages(): List<MediaItem> {
         val list = ArrayList<MediaItem>()
         val proj = arrayOf(
@@ -21,7 +28,9 @@ class MediaRepository(private val ctx: Context) {
             MediaStore.Images.Media.DISPLAY_NAME,
             MediaStore.Images.Media.DATE_ADDED,
             MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Images.Media.SIZE
+            MediaStore.Images.Media.SIZE,
+            MediaStore.Images.Media.WIDTH,
+            MediaStore.Images.Media.HEIGHT
         )
         try {
             ctx.contentResolver.query(
@@ -34,6 +43,8 @@ class MediaRepository(private val ctx: Context) {
                 val dateI = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
                 val bucketI = c.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
                 val sizeI = c.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)
+                val wI = c.getColumnIndex(MediaStore.Images.Media.WIDTH)
+                val hI = c.getColumnIndex(MediaStore.Images.Media.HEIGHT)
                 while (c.moveToNext()) {
                     val id = c.getLong(idI)
                     val uri = ContentUris.withAppendedId(
@@ -48,7 +59,9 @@ class MediaRepository(private val ctx: Context) {
                             bucket = c.getString(bucketI) ?: "Unknown",
                             isVideo = false,
                             durationMs = 0L,
-                            sizeBytes = c.getLong(sizeI)
+                            sizeBytes = c.getLong(sizeI),
+                            width = if (wI >= 0) c.getInt(wI) else 0,
+                            height = if (hI >= 0) c.getInt(hI) else 0
                         )
                     )
                 }
@@ -67,7 +80,9 @@ class MediaRepository(private val ctx: Context) {
             MediaStore.Video.Media.DATE_ADDED,
             MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
             MediaStore.Video.Media.SIZE,
-            MediaStore.Video.Media.DURATION
+            MediaStore.Video.Media.DURATION,
+            MediaStore.Video.Media.WIDTH,
+            MediaStore.Video.Media.HEIGHT
         )
         try {
             ctx.contentResolver.query(
@@ -81,6 +96,8 @@ class MediaRepository(private val ctx: Context) {
                 val bucketI = c.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
                 val sizeI = c.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
                 val durI = c.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
+                val wI = c.getColumnIndex(MediaStore.Video.Media.WIDTH)
+                val hI = c.getColumnIndex(MediaStore.Video.Media.HEIGHT)
                 while (c.moveToNext()) {
                     val id = c.getLong(idI)
                     val uri = ContentUris.withAppendedId(
@@ -95,7 +112,9 @@ class MediaRepository(private val ctx: Context) {
                             bucket = c.getString(bucketI) ?: "Unknown",
                             isVideo = true,
                             durationMs = c.getLong(durI),
-                            sizeBytes = c.getLong(sizeI)
+                            sizeBytes = c.getLong(sizeI),
+                            width = if (wI >= 0) c.getInt(wI) else 0,
+                            height = if (hI >= 0) c.getInt(hI) else 0
                         )
                     )
                 }

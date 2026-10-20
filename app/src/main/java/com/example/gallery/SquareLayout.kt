@@ -2,13 +2,14 @@ package com.example.gallery
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatImageView
+import android.widget.FrameLayout
 
-class SquareImageView @JvmOverloads constructor(
+/** A FrameLayout that always measures itself square (width == height). */
+class SquareLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatImageView(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec)

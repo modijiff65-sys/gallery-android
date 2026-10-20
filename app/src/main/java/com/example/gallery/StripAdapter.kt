@@ -1,11 +1,13 @@
 package com.example.gallery
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 
 class StripAdapter(private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<StripAdapter.VH>() {
@@ -28,7 +30,7 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
     }
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
-        val img: ImageView = v.findViewById(R.id.stripThumb)
+        val img: ShapeableImageView = v.findViewById(R.id.stripThumb)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -39,8 +41,20 @@ class StripAdapter(private val onClick: (Int) -> Unit) :
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        Glide.with(holder.img).load(items[position].uri).centerCrop().into(holder.img)
-        holder.img.alpha = if (position == selected) 1f else 0.5f
+        val item = items[position]
+        Glide.with(holder.img).load(item.uri).centerCrop().into(holder.img)
+        val isSel = position == selected
+        holder.img.alpha = if (isSel) 1f else 0.6f
+        holder.img.strokeWidth = if (isSel) dp(holder.img, 2) else 0
+        holder.img.strokeColor = ColorStateList.valueOf(Color.WHITE)
         holder.itemView.setOnClickListener { onClick(position) }
     }
+
+    override fun onViewRecycled(holder: VH) {
+        Glide.with(holder.img).clear(holder.img)
+        super.onViewRecycled(holder)
+    }
+
+    private fun dp(v: View, value: Int): Int =
+        (value * v.resources.displayMetrics.density).toInt()
 }

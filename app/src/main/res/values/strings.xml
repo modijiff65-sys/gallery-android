@@ -6,6 +6,20 @@
     <string name="nav_photos">Photos</string>
     <string name="nav_albums">Albums</string>
     <string name="nav_favs">Favourites</string>
+    <string name="search_hint">Photos, videos ya album search karein</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_all">Select all</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="info">Info</string>
+    <string name="favourite">Favourite</string>
     <string name="empty_title">No photos yet</string>
     <string name="empty_sub">Aapke device par koi photo ya video nahi mila.</string>
+    <string name="no_results_title">Kuch nahi mila</string>
+    <string name="loading">Gallery load ho rahi hai…</string>
+    <string name="permission_title">Photos access chahiye</string>
+    <string name="permission_sub">Gallery ko aapki photos aur videos dikhane ke liye storage access dena zaroori hai. Ye data aapke device par hi rehta hai.</string>
+    <string name="grant">Permission dein</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
 </resources>

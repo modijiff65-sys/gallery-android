@@ -4,10 +4,10 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 
 class AlbumAdapter(private val onClick: (Album) -> Unit) :
     RecyclerView.Adapter<AlbumAdapter.VH>() {
@@ -21,7 +21,7 @@ class AlbumAdapter(private val onClick: (Album) -> Unit) :
     }
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
-        val cover: ImageView = v.findViewById(R.id.cover)
+        val cover: ShapeableImageView = v.findViewById(R.id.cover)
         val name: TextView = v.findViewById(R.id.albumName)
         val count: TextView = v.findViewById(R.id.albumCount)
     }
@@ -42,5 +42,10 @@ class AlbumAdapter(private val onClick: (Album) -> Unit) :
             .centerCrop()
             .into(holder.cover)
         holder.itemView.setOnClickListener { onClick(album) }
+    }
+
+    override fun onViewRecycled(holder: VH) {
+        Glide.with(holder.cover).clear(holder.cover)
+        super.onViewRecycled(holder)
     }
 }

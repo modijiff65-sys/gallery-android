@@ -11,7 +11,9 @@ data class MediaItem(
     val bucket: String,
     val isVideo: Boolean,
     val durationMs: Long,
-    val sizeBytes: Long
+    val sizeBytes: Long,
+    val width: Int,
+    val height: Int
 ) : Serializable {
     val uri: Uri get() = Uri.parse(uriString)
 }
@@ -22,3 +24,8 @@ data class Album(
     val coverUriString: String,
     val coverIsVideo: Boolean
 ) : Serializable
+
+sealed class GridItem {
+    data class Header(val title: String) : GridItem()
+    data class Media(val item: MediaItem) : GridItem()
+}

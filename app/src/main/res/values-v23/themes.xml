@@ -8,5 +8,8 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:textColorPrimary">@color/ink</item>
+        <item name="android:textColorSecondary">@color/muted</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.Gallery.BottomSheet</item>
     </style>
 </resources>

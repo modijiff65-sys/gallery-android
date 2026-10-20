@@ -2,6 +2,7 @@ package com.example.gallery
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,9 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class ViewerActivity : AppCompatActivity() {
 
@@ -38,6 +36,7 @@ class ViewerActivity : AppCompatActivity() {
     private var index = 0
 
     private lateinit var pager: ViewPager2
+    private lateinit var adapter: ViewerAdapter
     private lateinit var stripAdapter: StripAdapter
     private lateinit var vTitle: TextView
     private lateinit var vDate: TextView
@@ -73,11 +72,13 @@ class ViewerActivity : AppCompatActivity() {
         strip.adapter = stripAdapter
         stripAdapter.submit(items, index)
 
-        pager.adapter = ViewerAdapter(items)
+        adapter = ViewerAdapter(items)
+        pager.adapter = adapter
         pager.setCurrentItem(index, false)
         pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 index = position
+                adapter.onPageChanged(position)
                 updateHeader()
                 stripAdapter.setSelected(position)
                 strip.scrollToPosition(position)
@@ -86,6 +87,7 @@ class ViewerActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
         findViewById<View>(R.id.btnMore).setOnClickListener { showInfo() }
+        findViewById<View>(R.id.btnShareTop).setOnClickListener { share() }
         findViewById<View>(R.id.actShare).setOnClickListener { share() }
         findViewById<View>(R.id.actFav).setOnClickListener { toggleFav() }
         findViewById<View>(R.id.actDelete).setOnClickListener { confirmDelete() }
@@ -94,13 +96,22 @@ class ViewerActivity : AppCompatActivity() {
         updateHeader()
     }
 
+    override fun onPause() {
+        super.onPause()
+        adapter.pauseActive()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.release()
+    }
+
     private fun current(): MediaItem? = items.getOrNull(index)
 
     private fun updateHeader() {
         val item = current() ?: return
         vTitle.text = item.name
-        val df = SimpleDateFormat("dd MMM yyyy · hh:mm a", Locale.getDefault())
-        vDate.text = df.format(Date(item.dateMs))
+        vDate.text = DateUtils.fullStamp(item.dateMs)
         favIcon.alpha = if (Favs.contains(this, item.uriString)) 1f else 0.45f
     }
 
@@ -114,7 +125,7 @@ class ViewerActivity : AppCompatActivity() {
             }
             startActivity(Intent.createChooser(i, "Share via"))
         } catch (e: Exception) {
-            Toast.makeText(this, "Share nahi ho paya", Toast.LENGTH_SHORT).show()
+            toast("Share nahi ho paya")
         }
     }
 
@@ -122,11 +133,7 @@ class ViewerActivity : AppCompatActivity() {
         val item = current() ?: return
         val added = Favs.toggle(this, item.uriString)
         favIcon.alpha = if (added) 1f else 0.45f
-        Toast.makeText(
-            this,
-            if (added) "Favourites mein add hua" else "Favourites se hata",
-            Toast.LENGTH_SHORT
-        ).show()
+        toast(if (added) "Favourites mein add hua" else "Favourites se hata")
     }
 
     private fun confirmDelete() {
@@ -149,7 +156,7 @@ class ViewerActivity : AppCompatActivity() {
                 if (n > 0) deleteCurrent()
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Delete nahi ho paya", Toast.LENGTH_SHORT).show()
+            toast("Delete nahi ho paya")
         }
     }
 
@@ -160,29 +167,27 @@ class ViewerActivity : AppCompatActivity() {
             return
         }
         if (index >= items.size) index = items.size - 1
-        pager.adapter = ViewerAdapter(items)
+        adapter.release()
+        adapter = ViewerAdapter(items)
+        pager.adapter = adapter
         pager.setCurrentItem(index, false)
         stripAdapter.submit(items, index)
         updateHeader()
-        Toast.makeText(this, "Delete ho gaya", Toast.LENGTH_SHORT).show()
+        toast("Delete ho gaya")
     }
 
     private fun showInfo() {
         val item = current() ?: return
-        val df = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
-        val mb = item.sizeBytes / (1024.0 * 1024.0)
         val sb = StringBuilder()
         sb.append("Name: ").append(item.name).append("\n")
         sb.append("Album: ").append(item.bucket).append("\n")
-        sb.append("Date: ").append(df.format(Date(item.dateMs))).append("\n")
-        sb.append("Size: ")
-            .append(String.format(Locale.getDefault(), "%.2f MB", mb))
-            .append("\n")
+        sb.append("Date: ").append(DateUtils.fullStamp(item.dateMs)).append("\n")
+        sb.append("Size: ").append(DateUtils.size(item.sizeBytes)).append("\n")
+        if (item.width > 0 && item.height > 0) {
+            sb.append("Dimensions: ").append(item.width).append(" × ").append(item.height).append("\n")
+        }
         if (item.isVideo) {
-            val secs = item.durationMs / 1000
-            sb.append("Duration: ")
-                .append(String.format(Locale.getDefault(), "%d:%02d", secs / 60, secs % 60))
-                .append("\n")
+            sb.append("Duration: ").append(DateUtils.duration(item.durationMs)).append("\n")
             sb.append("Type: Video")
         } else {
             sb.append("Type: Image")
@@ -193,4 +198,6 @@ class ViewerActivity : AppCompatActivity() {
             .setPositiveButton("OK", null)
             .show()
     }
+
+    private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }

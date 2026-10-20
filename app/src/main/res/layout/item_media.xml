@@ -1,23 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.gallery.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="2dp">
 
-    <com.example.gallery.SquareImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/thumb"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#EDEDF2"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent"
+        android:background="@color/chipBg"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Gallery.Thumb" />
+
+    <View
+        android:id="@+id/selScrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_scrim_rounded"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/playBadge"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="bottom|start"
         android:layout_margin="6dp"
         android:src="@drawable/ic_play"
         android:visibility="gone"
         app:tint="#FFFFFF" />
-</FrameLayout>
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_badge"
+        android:paddingStart="6dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="2dp"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:visibility="gone"
+        tools:text="1:23" />
+
+    <ImageView
+        android:id="@+id/checkIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="6dp"
+        android:src="@drawable/ic_check_circle"
+        android:visibility="gone"
+        app:tint="#FFFFFF" />
+</com.example.gallery.SquareLayout>

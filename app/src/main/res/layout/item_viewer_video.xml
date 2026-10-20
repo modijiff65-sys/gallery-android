@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <VideoView
+        android:id="@+id/video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/bigPlay"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:layout_gravity="center"
+        android:alpha="0.92"
+        android:src="@drawable/ic_play_circle"
+        app:tint="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/videoControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#99000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/curTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:text="0:00" />
+
+        <SeekBar
+            android:id="@+id/seek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp" />
+
+        <TextView
+            android:id="@+id/totalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:text="0:00" />
+    </LinearLayout>
+</FrameLayout>

@@ -13,6 +13,18 @@ object Favs {
 
     fun contains(ctx: Context, uri: String): Boolean = get(ctx).contains(uri)
 
+    fun add(ctx: Context, uris: Collection<String>) {
+        val set = get(ctx)
+        set.addAll(uris)
+        prefs(ctx).edit().putStringSet(KEY, set).apply()
+    }
+
+    fun remove(ctx: Context, uris: Collection<String>) {
+        val set = get(ctx)
+        set.removeAll(uris.toSet())
+        prefs(ctx).edit().putStringSet(KEY, set).apply()
+    }
+
     fun toggle(ctx: Context, uri: String): Boolean {
         val set = get(ctx)
         val added = if (set.contains(uri)) {

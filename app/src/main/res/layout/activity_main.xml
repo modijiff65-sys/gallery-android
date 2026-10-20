@@ -7,24 +7,39 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/headerRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="20dp"
         android:paddingTop="14dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="6dp">
+        android:paddingEnd="10dp"
+        android:paddingBottom="4dp">
 
-        <TextView
-            android:id="@+id/title"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/app_name"
-            android:textColor="@color/ink"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/ink"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/muted"
+                android:textSize="13sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/btnSearch"
@@ -34,7 +49,7 @@
             android:contentDescription="Search"
             android:padding="10dp"
             android:src="@drawable/ic_search"
-            app:tint="@color/muted" />
+            app:tint="@color/ink2" />
 
         <ImageView
             android:id="@+id/btnMore"
@@ -44,6 +59,58 @@
             android:contentDescription="More"
             android:padding="10dp"
             android:src="@drawable/ic_more"
+            app:tint="@color/ink2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/searchRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/btnSearchBack"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:padding="10dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ink" />
+
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_search"
+            android:hint="@string/search_hint"
+            android:imeOptions="actionSearch"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:paddingTop="11dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="11dp"
+            android:textColor="@color/ink"
+            android:textColorHint="@color/muted"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/btnSearchClear"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Clear"
+            android:padding="11dp"
+            android:src="@drawable/ic_close"
             app:tint="@color/muted" />
     </LinearLayout>
 
@@ -70,9 +137,12 @@
             android:paddingEnd="16dp"
             android:text="@string/tab_photos"
             android:textAllCaps="false"
+            android:textColor="@color/tab_text"
             android:textSize="13sp"
-            app:cornerRadius="10dp"
-            app:strokeColor="@color/line" />
+            app:backgroundTint="@color/tab_bg"
+            app:cornerRadius="14dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/tabAlbums"
@@ -86,9 +156,12 @@
             android:paddingEnd="16dp"
             android:text="@string/tab_albums"
             android:textAllCaps="false"
+            android:textColor="@color/tab_text"
             android:textSize="13sp"
-            app:cornerRadius="10dp"
-            app:strokeColor="@color/line" />
+            app:backgroundTint="@color/tab_bg"
+            app:cornerRadius="14dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/tabFavs"
@@ -102,10 +175,57 @@
             android:paddingEnd="16dp"
             android:text="@string/tab_favs"
             android:textAllCaps="false"
+            android:textColor="@color/tab_text"
             android:textSize="13sp"
-            app:cornerRadius="10dp"
-            app:strokeColor="@color/line" />
+            app:backgroundTint="@color/tab_bg"
+            app:cornerRadius="14dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <LinearLayout
+        android:id="@+id/selectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/btnSelClose"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close"
+            android:padding="10dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/ink" />
+
+        <TextView
+            android:id="@+id/selCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="6dp"
+            android:textColor="@color/ink"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:text="@string/select_all"
+            android:textColor="@color/accent"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -117,8 +237,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="8dp"
+            android:paddingBottom="10dp"
             android:scrollbars="none" />
+
+        <LinearLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:indicatorColor="@color/accent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/loading"
+                android:textColor="@color/muted"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/empty"
@@ -129,13 +272,15 @@
             android:visibility="gone">
 
             <ImageView
+                android:id="@+id/emptyIcon"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:alpha="0.22"
+                android:alpha="0.2"
                 android:src="@drawable/ic_image"
                 app:tint="@color/ink" />
 
             <TextView
+                android:id="@+id/emptyTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
@@ -145,15 +290,28 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/emptySub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp"
+                android:paddingStart="34dp"
+                android:paddingEnd="34dp"
                 android:text="@string/empty_sub"
                 android:textColor="@color/muted"
                 android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGrant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/grant"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                app:backgroundTint="@color/accent"
+                app:cornerRadius="14dp" />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -168,6 +326,93 @@
             app:fabSize="normal"
             app:tint="@color/white" />
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/selectionActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/selShare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_share"
+                app:tint="@color/ink2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/share"
+                android:textColor="@color/ink2"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/selDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/ink2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/delete"
+                android:textColor="@color/ink2"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/selFav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_heart"
+                app:tint="@color/ink2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/favourite"
+                android:textColor="@color/ink2"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
